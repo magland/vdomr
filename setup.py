@@ -4,7 +4,7 @@ pkg_name = "vdomr"
 
 setuptools.setup(
     name=pkg_name,
-    version="0.1.0",
+    version="0.1.1",
     author="Jeremy Magland",
     author_email="jmagland@flatironinstitute.org",
     description="Interactive DOM components for python and jupyter",
