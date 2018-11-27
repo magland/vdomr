@@ -1,4 +1,4 @@
-*Warning: This project is in alpha development phase and is subject to breaking changes*
+**Warning:** *This project is in alpha development phase and is subject to breaking changes*
 
 # vdomr
 Interactive DOM components for python and jupyter
@@ -15,7 +15,7 @@ pip install vdomr
 
 Use with google colaboratory, jupyter notebook, or jupyter lab.
 
-Note: Right now the interactive components only work in google colaboratory.
+**Note:** *Right now the interactive components only work in google colaboratory.*
 
 ## Examples
 
