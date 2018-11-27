@@ -25,10 +25,10 @@ Here's a display-only example usage (e.g., no interactive components):
 
 ```
 X=vd.div(
-    vd.h1('An example of using vdomr'),
+    vd.h1('An example of using vdomr',id='you-can-set-the-id-and-attributes-of-elements'),
     vd.p('This was created ', vd.b('in Python'), '.'),
     vd.img(src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Python_logo_and_wordmark.svg/486px-Python_logo_and_wordmark.svg.png"),
-    vd.p('What will ', vd.b('you'), ' create next?'),
+    vd.p('You can style elements too!',style={"font-family":"Courier"}),
 )
 display(X)
 ```
