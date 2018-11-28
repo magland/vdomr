@@ -1,11 +1,15 @@
-**Warning:** *This project is in alpha development phase and is subject to breaking changes*
+## VDOMR
 
-# vdomr
 Interactive DOM components for python and jupyter
 
-## About
+**Warning:** *This project is in alpha development phase and is subject to breaking changes*
+
+
+## Overview
 
 This project was inspired by [nteract/vdom](https://github.com/nteract/vdom) but it supports interactive components (buttons, checkboxes, input fields etc).
+
+You can create interactive visualizations to embed in jupyter notebooks. It's sort of like programming in HTML/Javascript/React, except that you never leave python.
 
 ## Installation
 
@@ -16,7 +20,6 @@ pip install vdomr
 Use with google colaboratory, jupyter notebook, or jupyter lab.
 
 **Note:** *Right now the interactive components only work in google colaboratory.*
-
 ## Examples
 
 See this [live google colab notebook](https://colab.research.google.com/gist/magland/4b1bb85e59f13750e7e4d9fbe9c31d3a/vdomr_demo.ipynb) for example usage.
