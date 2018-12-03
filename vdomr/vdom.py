@@ -41,11 +41,14 @@ class VDOM(object):
                 out.write(' style="{css}"'.format(css=escape(self._to_inline_css(self.style))))
 
             for k, v in self.attributes.items():
+                k2=k
+                if k2=='class_':
+                    k2='class'
                 # Important values are in double quotes - cgi.escape only escapes double quotes, not single quotes!
                 if isinstance(v, string_types):
-                    out.write(' {key}="{value}"'.format(key=escape(k), value=escape(v)))
+                    out.write(' {key}="{value}"'.format(key=escape(k2), value=escape(v)))
                 if isinstance(v, bool) and v:
-                    out.write(' {key}'.format(key=escape(k)))
+                    out.write(' {key}'.format(key=escape(k2)))
             out.write('>')
 
             for c in self.children:

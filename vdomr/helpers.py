@@ -1,5 +1,7 @@
 from .vdom import VDOM
 import uuid
+from IPython.display import Javascript
+from .vdomr import register_callback
 
 def _create_component(tag_name, allow_children=True, callbacks=[]):
     """
@@ -37,14 +39,17 @@ def _create_component(tag_name, allow_children=True, callbacks=[]):
           if cbname in attributes:
             from google.colab import output as colab_output
             callback_id = cbname+'callback-' + str(uuid.uuid4())
-            colab_output.register_callback(callback_id,attributes[cbname])
-            js="google.colab.kernel.invokeFunction('{callback_id}', [], {kwargs})"
+            register_callback(callback_id,attributes[cbname])
+            #js="google.colab.kernel.invokeFunction('{callback_id}', [], {kwargs})"
+            js="window.vdomr_invokeFunction('{callback_id}', [], {kwargs})"
             js=js.replace('{callback_id}',callback_id)
             js=js.replace('{kwargs}',cb['kwargs'])
             attributes[cbname]=js
 
         v = VDOM(tag_name, attributes, style, children)
         return v
+
+
     return _component
 
 # From https://developer.mozilla.org/en-US/docs/Web/HTML/Element
