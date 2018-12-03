@@ -4,7 +4,6 @@ import uuid
 import abc
 
 from IPython.display import clear_output
-from ipywidgets import widgets
 from .vdomr import exec_javascript
 
 class Component(object):
