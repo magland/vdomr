@@ -15,8 +15,10 @@ class Component(object):
   def refresh(self):
     html=self.render().to_html()
     html_encoded=base64.b64encode(html.encode('utf-8')).decode('utf-8')
-    js="{{console.log('test 1'); var elmt=document.getElementById('{}'); if (elmt) elmt.innerHTML=atob('{}'); console.log('test 2')}}".format(self._div_id,html_encoded)
+    js="{{var elmt=document.getElementById('{}'); if (elmt) elmt.innerHTML=atob('{}');}}".format(self._div_id,html_encoded)
     exec_javascript(js)
+  def to_html(self):
+    return self._repr_html_()
   def _repr_html_(self):
     html=self.render().to_html()
     return '<div id={}>'.format(self._div_id)+html+'</div>'

@@ -30,6 +30,10 @@ def _create_component(tag_name, allow_children=True, callbacks=[]):
             attributes = kwargs['attributes']
         else:
             attributes = dict(**kwargs)
+
+        if (tag_name=='a') and ('href' not in attributes):
+            attributes['href']='#'
+
         if not allow_children and children:
             # We don't allow children, but some were passed in
             raise ValueError('<{tag_name} /> cannot have children'.format(tag_name=tag_name))
@@ -73,7 +77,7 @@ section = _create_component('section')
 # Text content
 blockquote = _create_component('blockquote')
 dd = _create_component('dd')
-div = _create_component('div')
+div = _create_component('div',callbacks=[dict(name='onclick',kwargs='{}')])
 dl = _create_component('dl')
 dt = _create_component('dt')
 figcaption = _create_component('figcaption')
@@ -86,7 +90,7 @@ pre = _create_component('pre')
 ul = _create_component('ul')
 
 # Inline text semantics
-a = _create_component('a')
+a = _create_component('a',callbacks=[dict(name='onclick',kwargs='{}')])
 abbr = _create_component('abbr')
 b = _create_component('b')
 br = _create_component('br', allow_children=False)
@@ -101,7 +105,7 @@ q = _create_component('q')
 s = _create_component('s')
 samp = _create_component('samp')
 small = _create_component('small')
-span = _create_component('span')
+span = _create_component('span',callbacks=[dict(name='onclick',kwargs='{}')])
 strong = _create_component('strong')
 sub = _create_component('sub')
 sup = _create_component('sup')
