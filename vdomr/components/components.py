@@ -66,10 +66,34 @@ class Button(vd.Component):
         button=vd.button(self._label,onclick=self._on_click,**self._kwargs)
         return button
 
+class LineEdit(vd.Component):
+    def __init__(self,value='',dtype=str,**kwargs):
+        vd.Component.__init__(self)
+        self._kwargs=kwargs
+        self._value=None
+        self._dtype=dtype
+        if value:
+          self.setValue(value)
+    def value(self):
+      if self._dtype==str:
+        return self._value
+      else:
+        return self._dtype(self._value)
+    def setValue(self,value):
+        self._value=str(value)
+        self.refresh()
+    def _on_change(self,value):
+        self._value=value
+    def render(self):
+        X=vd.input(type='text',value=self._value,onchange=self._on_change,**self._kwargs)
+        return X
+
 class Pyplot(vd.Component):
-  def __init__(self):
+  def __init__(self,size=None):
     vd.Component.__init__(self)
-    self._size=(200,200)
+    self._size=size
+    if self._size is None:
+        self._size=(200,200)
     
   @abstractmethod
   def plot(self):
@@ -84,13 +108,13 @@ class Pyplot(vd.Component):
   def render(self):
     import base64
     from matplotlib import pyplot as plt
-    plt.figure(figsize=(self._size[0]/100,self._size[1]/100),dpi=100)
+    fig=plt.figure(figsize=(self._size[0]/100,self._size[1]/100),dpi=100)
     try:
         self.plot()
     except Exception as e:
         return vd.div('Error in plot: '+str(e))
     tmp_fname='tmp_pyplot.jpg'
-    _save_plot(tmp_fname)
+    _save_plot(fig,tmp_fname)
     with open(tmp_fname,'rb') as f:
       data_b64=base64.b64encode(f.read()).decode('utf-8')
     os.remove(tmp_fname)
@@ -113,7 +137,7 @@ class ScrollArea(vd.Component):
     return vd.div(self._child,style=style)
 
 
-def _save_plot(fname,quality=40):
+def _save_plot(fig,fname,quality=40):
     from PIL import Image
     from matplotlib import pyplot as plt
 
@@ -122,7 +146,7 @@ def _save_plot(fname,quality=40):
 
     dpi=100
     plt.savefig(fname+'.png',pad_inches=0) #,bbox_inches='tight')
-    plt.close()
+    plt.close(fig)
     im=Image.open(fname+'.png').convert('RGB')
     os.remove(fname+'.png')
     im.save(fname,quality=quality)
