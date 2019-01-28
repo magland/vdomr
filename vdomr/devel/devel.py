@@ -1,6 +1,7 @@
 from IPython.display import HTML
 import os
 import vdomr as vd
+import base64
 
 def loadBootstrap():
   url='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css'
@@ -16,13 +17,13 @@ def loadCss(*,url=None,path=None,css=None,integrity=None,crossorigin=None):
     loadCss(css=css)
     return
   if css:
-
     js="""
     let style = document.createElement( "style" );
-    style.appendChild(document.createTextNode('{css}'));
+    style.appendChild(document.createTextNode(atob('{css_b64}')));
     document.getElementsByTagName( "head" )[0].appendChild( style );
     """
-    js=css.join(js.split('{css}'))
+    css_b64=base64.b64encode(css.encode('utf-8')).decode()
+    js=css_b64.join(js.split('{css_b64}'))
     loadJavascript(js=js)
 
     #display(HTML('<style>{}</style>'.format(css)))
@@ -60,7 +61,6 @@ def loadJavascript(*,url=None,path=None,js=None,delay=None):
     #    return
     with open(path) as f:
       js=f.read()
-    #print('loading javascript from path',path,len(js))
     loadJavascript(js=js,delay=delay)
     #loaded_javascript_files[path]=dict(mtime=modified_timestamp)
     return
@@ -91,7 +91,7 @@ def loadJavascript(*,url=None,path=None,js=None,delay=None):
 
     document.getElementsByTagName( "head" )[0].appendChild( script );
     """
-    js0=url.join(js0.split('{script}'))
+    js0=url.join(js0.split('{url}'))
     loadJavascript(js=js0)
 
     #display(HTML('<script src="{}"></script>'.format(url)))

@@ -94,6 +94,7 @@ class Pyplot(vd.Component):
     self._size=size
     if self._size is None:
         self._size=(200,200)
+    self._image_data_b64=None
     
   @abstractmethod
   def plot(self):
@@ -101,24 +102,33 @@ class Pyplot(vd.Component):
 
   def setSize(self,size):
     self._size=size
+    self._update_image()
+
+  def _update_image(self):
+    self._image_data_b64=None
+    self.refresh()
 
   def size(self):
     return self._size
+
+  def update(self):
+    self._update_image()
   
   def render(self):
-    import base64
-    from matplotlib import pyplot as plt
-    fig=plt.figure(figsize=(self._size[0]/100,self._size[1]/100),dpi=100)
-    try:
-        self.plot()
-    except Exception as e:
-        return vd.div('Error in plot: '+str(e))
-    tmp_fname='tmp_pyplot.jpg'
-    _save_plot(fig,tmp_fname)
-    with open(tmp_fname,'rb') as f:
-      data_b64=base64.b64encode(f.read()).decode('utf-8')
-    os.remove(tmp_fname)
-    src='data:image/jpeg;base64, {}'.format(data_b64)
+    if self._image_data_b64 is None:
+        import base64
+        from matplotlib import pyplot as plt
+        fig=plt.figure(figsize=(self._size[0]/100,self._size[1]/100),dpi=100)
+        try:
+            self.plot()
+        except Exception as e:
+            return vd.div('Error in plot: '+str(e))
+        tmp_fname='tmp_pyplot.jpg'
+        _save_plot(fig,tmp_fname,quality=100)
+        with open(tmp_fname,'rb') as f:
+          self._image_data_b64=base64.b64encode(f.read()).decode('utf-8')
+        os.remove(tmp_fname)
+    src='data:image/jpeg;base64, {}'.format(self._image_data_b64)
     elmt=vd.img(src=src)
     return elmt
 
@@ -165,8 +175,9 @@ class LazyDiv(vd.Component):
         self.refresh()
     def render(self):
         try:
-            size=self._child.size() ## if it has the size attribute
+            size=self._child.size() ## if it has the size method
         except:
+            print('Warning: child of LazyDiv does not have a size() method')
             size=(300,300)
         div_style=dict()
         div_style['width']='{}px'.format(size[0])
